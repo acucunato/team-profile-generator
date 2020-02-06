@@ -5,6 +5,12 @@ const Manager = require("./lib/manager");
 const inquirer = require("inquirer");
 const fs = require("fs");
 
+//to generate html file
+const generateHTML = require("./templates/main");
+const managerCard = require("./templates/manager");
+const internCard = require("./templates/intern");
+const engineerCard = require("./templates/engineer");
+
 const createTeam = [];
 
 //create fx for specific questions general prompts
@@ -43,7 +49,7 @@ const engineerPrompt = [
     message: "What is your employee's GitHub username?"
   }
 ];
-
+//start with manager only 1 manager
 inquirer
   .prompt([
     {
@@ -71,7 +77,8 @@ inquirer
     createTeam.push(new Manager(res.name, res.email, res.id, res.officeNumber));
 
     addRoles();
-  });
+  })
+  .catch(console.log("uh oh, something went wrong, please try again."));
 
 //add new employees
 function addRoles() {
@@ -95,31 +102,29 @@ function addRoles() {
           case "Intern":
             team = internPrompt;
             break;
-          case "None":
-            let HTML = generateHTML();
-            fs.writeFile("./output/team.html", html, err => {
-              if (err) {
-                console.log(err);
-              }
-            });
+          case "I do not want to add anymore employe":
+            return renderHTML(createTeam);
         }
-        // add both arrays together push to create team array
-        inquirer.prompt(questions.concat(team)).then(ans => {
-          switch (res.employee) {
-            case "Engineer":
-              createTeam.push(
-                new Engineer(ans.name, ans.id, ans.email, ans.github)
-              );
-              break;
-            case "Intern":
-              createTeam.push(
-                new Intern(ans.name, ans.id, ans.email, ans.school)
-              );
-              break;
-          }
-          console.log(createTeam);
-          addRoles();
-        });
+        // add both arrays together push to create team array & create team
+        inquirer
+          .prompt(questions.concat(team))
+          .then(ans => {
+            switch (res.employee) {
+              case "Engineer":
+                createTeam.push(
+                  new Engineer(ans.name, ans.id, ans.email, ans.github)
+                );
+                break;
+              case "Intern":
+                createTeam.push(
+                  new Intern(ans.name, ans.id, ans.email, ans.school)
+                );
+                break;
+            }
+            // console.log(createTeam);
+            addRoles();
+          })
+          .catch(console.log("uh oh, something went wrong, please try again."));
       })
   );
 }
