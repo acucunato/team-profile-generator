@@ -59,13 +59,13 @@ inquirer
     },
     {
       type: "input",
-      name: "email",
-      message: "What is your manager's email?"
+      name: "id",
+      message: "What is your manager's ID?"
     },
     {
       type: "input",
-      name: "id",
-      message: "What is your manager's ID?"
+      name: "email",
+      message: "What is your manager's email?"
     },
     {
       type: "input",
@@ -74,11 +74,10 @@ inquirer
     }
   ])
   .then(res => {
-    createTeam.push(new Manager(res.name, res.email, res.id, res.officeNumber));
+    createTeam.push(new Manager(res.name, res.id, res.email, res.officeNumber));
 
     addRoles();
-  })
-  .catch(console.log("uh oh, something went wrong, please try again."));
+  });
 
 //add new employees
 function addRoles() {
@@ -102,29 +101,57 @@ function addRoles() {
           case "Intern":
             team = internPrompt;
             break;
-          case "I do not want to add anymore employe":
+          case "None":
             return renderHTML(createTeam);
         }
         // add both arrays together push to create team array & create team
-        inquirer
-          .prompt(questions.concat(team))
-          .then(ans => {
-            switch (res.employee) {
-              case "Engineer":
-                createTeam.push(
-                  new Engineer(ans.name, ans.id, ans.email, ans.github)
-                );
-                break;
-              case "Intern":
-                createTeam.push(
-                  new Intern(ans.name, ans.id, ans.email, ans.school)
-                );
-                break;
-            }
-            // console.log(createTeam);
-            addRoles();
-          })
-          .catch(console.log("uh oh, something went wrong, please try again."));
+        inquirer.prompt(questions.concat(team)).then(ans => {
+          switch (res.employee) {
+            case "Engineer":
+              createTeam.push(
+                new Engineer(ans.name, ans.id, ans.email, ans.github)
+              );
+              break;
+            case "Intern":
+              createTeam.push(
+                new Intern(ans.name, ans.id, ans.email, ans.school)
+              );
+              break;
+          }
+          // console.log(createTeam);
+          addRoles();
+        });
       })
   );
+}
+
+//renderhtml to page added cards for each role, loop through roles and add elements
+function renderHTML(array) {
+  let roleHTML = "";
+  array.forEach(function(employee) {
+    const role = employee.getRole();
+    switch (role) {
+      case "Manager":
+        roleHTML += managerCard(employee);
+        break;
+      case "Engineer":
+        roleHTML += engineerCard(employee);
+        break;
+      case "Intern":
+        roleHTML += internCard(employee);
+        break;
+    }
+  });
+
+  //generates html file
+  const html = generateHTML(roleHTML);
+  fs.writeFile("./output/team.html", html, err => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(
+        "Your Team Profile Page has been created successfully in the output folder."
+      );
+    }
+  });
 }

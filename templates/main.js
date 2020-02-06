@@ -12,8 +12,15 @@ function generateHTML(res) {
           integrity="sha384-yrfSO0DBjS56u5M+SjWTyAHujrkiYVtRYh2dtB3yLQtUz3bodOeialO59u5lUCFF"
           crossorigin="anonymous"
         />
+        <link
+        href="https://fonts.googleapis.com/css?family=Raleway&display=swap"
+        rel="stylesheet"
+      />
         <script src="https://kit.fontawesome.com/c502137733.js"></script>
         <style>
+          html, body {
+            font-family: "Raleway", sans-serif;
+          }
           .jumbotron {
             background-color: gray;
           }
@@ -26,6 +33,13 @@ function generateHTML(res) {
           .card-header,
           .card-body {
             background-color: white;
+          }
+          a {
+            color: salmon;
+          }
+    
+          a:hover {
+            color: lightgrey;
           }
         </style>
       </head>
