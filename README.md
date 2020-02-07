@@ -20,7 +20,8 @@ node app.js
 
 ## Demo
 
-![Developer Profile Generator](./img/dev-gen-demo.gif "Developer Profile Generator")
+![Developer Team Generator](./img/appgif.gif "Developer Team Generator")
+![Developer Team Generator](./img/delpoyed.gif "Developer Team Generator")
 
 ## Tech used
 
